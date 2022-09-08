@@ -1,5 +1,6 @@
 package io.github.luabarbosa.quarkussocial.rest;
 
+import io.github.luabarbosa.quarkussocial.domain.model.User;
 import io.github.luabarbosa.quarkussocial.rest.dto.CreateUserRequest;
 
 import javax.ws.rs.*;
@@ -13,8 +14,13 @@ public class UserResource {
 
     @POST
     public Response createUser(CreateUserRequest userRequest){
-        return Response.ok(userRequest).build();
+        User user = new User();
+        user.setAge(userRequest.getAge());
+        user.setName(userRequest.getName());
 
+        user.persist(); //salva entidade no banco de dados
+
+        return Response.ok(user).build();
     }
 
     @GET
