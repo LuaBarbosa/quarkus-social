@@ -1,7 +1,10 @@
 package io.github.luabarbosa.quarkussocial.rest;
 
+import io.github.luabarbosa.quarkussocial.domain.model.Post;
 import io.github.luabarbosa.quarkussocial.domain.model.User;
+import io.github.luabarbosa.quarkussocial.domain.repository.PostRepository;
 import io.github.luabarbosa.quarkussocial.domain.repository.UserRepository;
+import io.github.luabarbosa.quarkussocial.rest.dto.CreatePostRequest;
 
 import javax.inject.Inject;
 import javax.persistence.Column;
@@ -16,20 +19,27 @@ import javax.ws.rs.core.Response;
 public class PostResource {
 
     private final UserRepository userRepository;
+    private final PostRepository repository;
 
     @Inject
-    public PostResource (UserRepository userRepository){
+    public PostResource (UserRepository userRepository,
+                         PostRepository repository){
         this.userRepository = userRepository;
+        this.repository = repository;
     }
 
     @POST
     @Transactional
-    public Response createPosts(@PathParam("userId") Long userId) {
+    public Response createPosts(@PathParam("userId") Long userId, CreatePostRequest posts) {
         User user = userRepository.findById(userId);
         if (user == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return null;
+        Post post = new Post();
+        post.setText(posts.getText());
+        post.getUser(user);
+        repository.persist(post);
+        return Response.status(Response.Status.CREATED).build();
     }
 
     @GET
