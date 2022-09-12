@@ -8,6 +8,7 @@ import io.github.luabarbosa.quarkussocial.rest.dto.CreatePostRequest;
 import io.github.luabarbosa.quarkussocial.rest.dto.PostResponse;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import io.quarkus.panache.common.Sort;
 import org.jboss.logging.annotations.Pos;
 
 import javax.inject.Inject;
@@ -57,7 +58,8 @@ public class PostResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        PanacheQuery<Post> query = repository.find("user", user);
+        PanacheQuery<Post> query = repository.find(
+                "user", Sort.by("dateTime", Sort.Direction.Descending), user);
 
         var list = query.list();
 
