@@ -25,4 +25,9 @@ public class Post {
 
     public void getUser(User user) {
     }
+    @PrePersist
+    public void prePersist(){
+        setDateTime(LocalDateTime.now());
+    }
 }
+

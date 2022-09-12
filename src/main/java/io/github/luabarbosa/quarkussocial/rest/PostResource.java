@@ -5,6 +5,9 @@ import io.github.luabarbosa.quarkussocial.domain.model.User;
 import io.github.luabarbosa.quarkussocial.domain.repository.PostRepository;
 import io.github.luabarbosa.quarkussocial.domain.repository.UserRepository;
 import io.github.luabarbosa.quarkussocial.rest.dto.CreatePostRequest;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import org.jboss.logging.annotations.Pos;
 
 import javax.inject.Inject;
 import javax.persistence.Column;
@@ -12,6 +15,7 @@ import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.time.LocalDateTime;
 
 @Path("/users/{userId}/posts")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -38,13 +42,23 @@ public class PostResource {
         Post post = new Post();
         post.setText(posts.getText());
         post.getUser(user);
+
         repository.persist(post);
+
         return Response.status(Response.Status.CREATED).build();
     }
 
     @GET
-    public Response listPosts(){
-        return Response.ok().build();
+    public Response listPosts(@PathParam("userId") Long userId){
+        User user = userRepository.findById(userId);
+        if(user == null){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        PanacheQuery<Post> query = repository.find("user", user);
+
+        var list = query.list();
+        return Response.ok(list).build();
     }
     @DELETE
     public Response deletePost(){
