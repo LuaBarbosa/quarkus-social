@@ -68,13 +68,4 @@ public class PostResource {
                 .collect(Collectors.toList());
         return Response.ok(postResponseList).build();
     }
-    @DELETE
-    public Response deletePost(){
-        return null;
-    }
-
-    @PUT
-    public Response updatePosts(){
-        return null;
-    }
 }
