@@ -34,13 +34,13 @@ public class FollowersResource {
     public Response followerUser(
             @PathParam("userId") Long id, FollowersRequest request ){
 
-        var user = repository.findById(id);
+        var user =  userRepository.findById(id);
 
         if(user == null){
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        var follower = userRepository.findById(request.getFollowerId());
+        var follower = userRepository.findById(request.getFollowersId());
 
         var entity = new Followers();
         entity.setUser(user);

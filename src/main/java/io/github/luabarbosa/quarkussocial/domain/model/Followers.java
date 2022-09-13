@@ -17,9 +17,10 @@ public class Followers {
      private User user;
 
      @ManyToOne
-     @JoinColumn(name = "user_id")
+     @JoinColumn(name = "followers_id")
      private User followers;
 
 
-
+    public void setUser(User user) {
+    }
 }
