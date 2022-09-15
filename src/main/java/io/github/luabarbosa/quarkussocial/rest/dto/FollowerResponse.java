@@ -8,11 +8,11 @@ public class FollowerResponse {
     private Long id;
     private String name;
 
-    public FollowerResponse() {
+    public FollowerResponse(FollowerResponse followerResponse) {
     }
 
     public FollowerResponse(Followers follower){
-        this(new FollowerResponse(follower.getId(), follower.getFollowers().getName());
+        this(new FollowerResponse(follower.getId(), follower.getFollowers().getName()));
     }
 
     public FollowerResponse(Long id, String name) {
